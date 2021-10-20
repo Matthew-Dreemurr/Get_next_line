@@ -6,12 +6,28 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/20 16:01:36 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/20 16:13:21 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <unistd.h>
+
+/**
+ * @brief 
+ * 
+ * @param buff 
+ * @return int 
+ */
+ssize_t		next_line(char *buff, int fd)
+{
+	ssize_t	ret;
+
+	ret = read(fd, &buff, BUFFER_SIZE);
+	if (ret > 0)
+		buff[ret] = '\0';
+	return (ret);
+}
 
 /**
  * @brief Get the next line object
@@ -31,7 +47,7 @@ char	*get_next_line(int fd)
 	buff[fd][0] = '\0';
 	while (!len_chrchr(buff[fd], '\0'));
 	{
-		
+		next_line(buff[fd], fd);
 	}
 }
 
