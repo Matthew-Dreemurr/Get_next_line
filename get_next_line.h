@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/20 16:04:29 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/20 16:07:53 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 /*.-| get_next_line.c |-.*/
 
 char	*get_next_line(int fd);
+ssize_t		next_line(char **buff);
 
 /*.-| get_next_line_utils.c |-.*/
 
