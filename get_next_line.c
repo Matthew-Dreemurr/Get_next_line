@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/20 16:13:21 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/20 16:58:17 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,13 @@ char	*get_next_line(int fd)
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	buff[fd][0] = '\0';
-	while (!len_chrchr(buff[fd], '\0'));
+	while (!len_chrchr(buff[fd], '\0'))
 	{
-		next_line(buff[fd], fd);
+		rret = next_line(buff[fd], fd);
+		if (!rret)
+			break ;
+		else if (rret == -1)
+			return (NULL);//TODO
 	}
 }
 
