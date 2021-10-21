@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/21 14:23:27 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/21 17:06:49 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /*._-=-_._-=-_. [//TODO REMOVE] ._-=-_._-=-_.*/
 #define BR getchar();
+#define BRP(x) printf(x);
 #include <stdio.h>
 /*._-=-_._-=-_. [//TODO REMOVE] ._-=-_._-=-_.*/
 
@@ -22,6 +23,7 @@
 # include <limits.h>
 # include <stddef.h>
 # include <unistd.h>
+# include <stdlib.h>
 
 /*._-=-_._-=-_. [define] ._-=-_._-=-_._-=-_.*/
 # ifndef BUFFER_SIZE

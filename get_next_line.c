@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/21 15:40:08 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/21 17:15:40 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,26 @@
 
 int	buff_manager(char *buffer, char *tmp)
 {
-	size_t	len;
-	char	*start_tmp;
-
-	start_tmp = tmp;
 	tmp = (char *)malloc(sizeof(char) * (len_chrchr(buffer, '\n') + 1));
+	if (!tmp)
+		return (0);
+	while (*buffer && !(*buffer == '\n'))
+	{
+		printf("01*buffer[%s]\n", buffer);
+		*tmp++ = *buffer++;
+	}
+	*tmp = '\0';
+		printf("01*tmp   [%s]\n", tmp);
+		BR;
 	while (*buffer)
 	{
-		*tmp = *buffer++;
-		if (*tmp++ == '\n')
-			break ;
+		printf("02*buffer[%s]\n", buffer);//TODO
+		printf("02*tmp   [%s]\n", tmp);//TODO
+		BR;
+		*buffer++ = *tmp++;
 	}
-	while (*buffer)
-		*buffer++ = *buffer++;//TODO erase buffer and dont call next_line if '\n' inside
-	
+	*tmp = '\0';
+	return (1);
 }
 /**
  * @brief 
@@ -58,27 +64,28 @@ char	*get_next_line(int fd)
 	char		*tmp;
 	ssize_t		rret;
 
-	(void)tmp;
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
+	tmp = NULL;
 	buff[fd][0] = '\0';
 	size_t debug;
 	while (!(debug = len_chrchr(buff[fd], '\n')))
 	{
 		rret = next_line(buff[fd], fd);
-		printf(
-		"buff|\n"
-		"%s\n"
-		"rret :[%lu]\n"
-		"debug:[%lu]\n",
-		buff[fd], rret, debug);
-		BR;
+											printf("buff|\n""%s\n""rret :[%lu]\n""debug:[%lu]\n",buff[fd], rret, debug);
+											BR;
 		if (!rret)
 			break ;
 		else if (rret == -1)
 			return (NULL);
-		else if (len_chrchr(buff[fd], '\n'))
-			buff_manager(buff[fd], tmp);//WIP
+		while (len_chrchr(buff[fd], '\n'))
+		{
+			if(!buff_manager(buff[fd], tmp))//WIP
+				return (NULL);
+			
+											printf("buff|\n""%s\n""tmp :[%s]\n",buff[fd],tmp);
+											BR;
+		}
 	}
 	return (NULL);
 }
