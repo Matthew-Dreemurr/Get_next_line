@@ -6,12 +6,29 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/21 14:32:29 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/21 15:40:08 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+int	buff_manager(char *buffer, char *tmp)
+{
+	size_t	len;
+	char	*start_tmp;
+
+	start_tmp = tmp;
+	tmp = (char *)malloc(sizeof(char) * (len_chrchr(buffer, '\n') + 1));
+	while (*buffer)
+	{
+		*tmp = *buffer++;
+		if (*tmp++ == '\n')
+			break ;
+	}
+	while (*buffer)
+		*buffer++ = *buffer++;//TODO erase buffer and dont call next_line if '\n' inside
+	
+}
 /**
  * @brief 
  * 
@@ -59,7 +76,9 @@ char	*get_next_line(int fd)
 		if (!rret)
 			break ;
 		else if (rret == -1)
-			return (NULL);//TODO
+			return (NULL);
+		else if (len_chrchr(buff[fd], '\n'))
+			buff_manager(buff[fd], tmp);//WIP
 	}
 	return (NULL);
 }
