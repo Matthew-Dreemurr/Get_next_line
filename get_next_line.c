@@ -6,12 +6,11 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/20 16:58:17 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/21 14:32:29 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <unistd.h>
 
 /**
  * @brief 
@@ -23,7 +22,7 @@ ssize_t		next_line(char *buff, int fd)
 {
 	ssize_t	ret;
 
-	ret = read(fd, &buff, BUFFER_SIZE);
+	ret = read(fd, buff, BUFFER_SIZE);
 	if (ret > 0)
 		buff[ret] = '\0';
 	return (ret);
@@ -42,17 +41,27 @@ char	*get_next_line(int fd)
 	char		*tmp;
 	ssize_t		rret;
 
+	(void)tmp;
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	buff[fd][0] = '\0';
-	while (!len_chrchr(buff[fd], '\0'))
+	size_t debug;
+	while (!(debug = len_chrchr(buff[fd], '\n')))
 	{
 		rret = next_line(buff[fd], fd);
+		printf(
+		"buff|\n"
+		"%s\n"
+		"rret :[%lu]\n"
+		"debug:[%lu]\n",
+		buff[fd], rret, debug);
+		BR;
 		if (!rret)
 			break ;
 		else if (rret == -1)
 			return (NULL);//TODO
 	}
+	return (NULL);
 }
 
 #include <fcntl.h>
@@ -64,12 +73,15 @@ int	main(int ac, char **av)
 	char	*str;
 	int		fd;
 
-	if (ac != 2);
+	setbuf(stdout, NULL);
+	if (ac != 2)
+		return (0);
 	fd = open(av[1], O_RDONLY);
-	while (str = get_next_line(fd))
+	while ((str = get_next_line(fd)))
 	{
 		printf("%s\n", str);
 		free(str);
 	}
+	close(fd);
 	return (0);
 }

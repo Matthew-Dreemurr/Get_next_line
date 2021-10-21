@@ -1,0 +1,52 @@
+SEARCH PATH FOR MANUAL PAGES
+       man uses a sophisticated method of finding manual page files, based  on  the
+       invocation options and environment variables, the /private/etc/man.conf con-
+       figuration file, and some built in conventions and heuristics.
+
+       First of all, when the name argument  to  man  contains  a  slash  (/),  man
+       assumes  it  is  a  file  specification  itself,  and  there is no searching
+       involved.
+
+       But in the normal case where name doesn't contain a slash,  man  searches  a
+       variety  of directories for a file that could be a manual page for the topic
+       named.
+
+       If you specify the -M pathlist option, pathlist is a colon-separated list of
+       the directories that man searches.
+
+       If  you don't specify -M but set the MANPATH environment variable, the value
+       of that variable is the list of the directories that man searches.
+
+       If you don't specify an explicit path list with -M or MANPATH, man  develops
+       its  own  path  list  based  on the contents of the configuration file /pri-
+       vate/etc/man.conf.  The MANPATH statements in the configuration  file  iden-
+       tify particular directories to include in the search path.
+
+       Furthermore,  the MANPATH_MAP statements add to the search path depending on
+       your command search path (i.e. your PATH environment  variable).   For  each
+       directory  that  may  be in the command search path, a MANPATH_MAP statement
+       specifies a directory that should be added to the  search  path  for  manual
+       page  files.   man  looks  at  the  PATH variable and adds the corresponding
+       directories to the manual page file search path.  Thus, with the proper  use
+       of  MANPATH_MAP,  when  you issue the command man xyz, you get a manual page
+       for the program that would run if you issued the command xyz.
+
+       In addition, for each directory in the command search path (we'll call it  a
+       "command  directory") for which you do not have a MANPATH_MAP statement, man
+       automatically looks for a manual page directory "nearby" namely as a  subdi-
+       rectory  in  the  command directory itself or in the parent directory of the
+       command directory.
+
+       You can disable the automatic "nearby" searches by  including  a  NOAUTOPATH
+       statement in /private/etc/man.conf.
+
+       In  each directory in the search path as described above, man searches for a
+       file named topic.section, with an optional suffix on the section number  and
+       possibly  a  compression  suffix.   If  it doesn't find such a file, it then
+       looks in any subdirectories named manN or catN where N is the manual section
+       number.   If the file is in a catN subdirectory, man assumes it is a format-
+       ted manual page file (cat page).  Otherwise, man assumes it is  unformatted.
+       In  either  case, if the filename has a known compression suffix (like .gz),
+       man assumes it is gzipped.
+       If you want to see where (or if) man would find the manual page for  a  par-
+       ticular topic, use the --path (-w) option.
