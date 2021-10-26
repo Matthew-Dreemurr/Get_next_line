@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:58 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 14:11:45 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 14:26:01 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ size_t	len_chrchr(char *str, char c)
  * @param s2 The suffix string can be NULL.
  * @return char* Pointer to the allocate memory.
  */
-static char	*alloc_init(const char *s1, const char *s2)
+char	*alloc_init(const char *s1, const char *s2)
 {
 	const char	*s1_p;
 	const char	*s2_p;
@@ -53,7 +53,7 @@ static char	*alloc_init(const char *s1, const char *s2)
 		s1_p++;
 	while (s2_p && *s2_p)
 		s2_p++;
-	// printf("malloc size:%lu\n",(1 + (s1_p - s1) + (s2_p - s2)));
+	printf("malloc size:%lu\n",(1 + (s1_p - s1) + (s2_p - s2)));
 	return ((char *)malloc(sizeof(char) * (1 + (s1_p - s1) + (s2_p - s2))));
 }
 

@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 14:15:36 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 14:25:08 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,20 @@ void	debug_nl(char *str)
 	puts("\n");
 }
 
+char	*ret_next_line(char **str)
+{
+	char	*ret;
+	ret = alloc_init(*str, NULL);
+	return (NULL);
+}
+
 /**
  * @brief 
  * 
  * @param buff 
  * @return int 
  */
-ssize_t		next_line(char *buff, int fd)
+ssize_t		read_next_line(char *buff, int fd)
 {
 	ssize_t	ret;
 
@@ -60,23 +67,20 @@ char	*get_next_line(int fd)
 	tmp[fd] = NULL;
 	while (!len_chrchr(tmp[fd], '\n'))
 	{
-		rret = next_line(buff, fd);
+		rret = read_next_line(buff, fd);
 		if (!rret || rret == -1)
 			return (free_return(&tmp[fd]));
 		puts("====buff nextline===");
 		debug_nl(buff);
 		BR;
-		if (!len_chrchr(tmp[fd], '\n'))
-		{
-			tmp[fd] = strjoin_and_free(&(tmp[fd]), buff);
-			if (!tmp[fd])
-				return (free_return(&tmp[fd]));
-			puts("====strjoin===");
-			debug_nl(tmp[fd]);
-			BR;
-		}
+		tmp[fd] = strjoin_and_free(&tmp[fd], buff);
+		if (!tmp[fd])
+			return (free_return(&tmp[fd]));
+		puts("====strjoin===");
+		debug_nl(tmp[fd]);
+		BR;
 	}
-	return ("UwU");
+	return (ret_next_line(&tmp[fd]));
 }
 
 #include <fcntl.h>

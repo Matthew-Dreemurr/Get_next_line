@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 13:56:10 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 14:26:12 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,13 @@
 /*.-| get_next_line.c |-.*/
 
 char	*get_next_line(int fd);
-ssize_t	next_line(char *buff, int fd);
+ssize_t	read_next_line(char *buff, int fd);
+char	*ret_next_line(char **str);
 
 /*.-| get_next_line_utils.c |-.*/
 
 size_t	len_chrchr(char *str, char c);
+char	*alloc_init(const char *s1, const char *s2);
 char	*strjoin_and_free(char **s1, char const *s2);
 char	*free_return(char **ptr);
 # endif
