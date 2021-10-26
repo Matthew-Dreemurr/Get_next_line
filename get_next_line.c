@@ -12,27 +12,27 @@
 
 #include "get_next_line.h"
 
-int	buff_manager(char *buffer, char *tmp)
+int	buff_manager(char *buffer, char **tmp)
 {
-	tmp = (char *)malloc(sizeof(char) * (len_chrchr(buffer, '\n') + 1));
-	if (!tmp)
+	char *ptr;
+	char *ptrb;
+
+	ptr = *tmp;
+	ptrb = buffer;
+	*tmp = (char *)malloc(sizeof(char) * (len_chrchr(buffer, '\n') + 1));
+	if (!*tmp)
 		return (0);
+	printf("Buffer:[[%s]]\n", buffer);
 	while (*buffer && !(*buffer == '\n'))
 	{
-		printf("01*buffer[%s]\n", buffer);
-		*tmp++ = *buffer++;
+		*ptr++ = *buffer++;
 	}
-	*tmp = '\0';
-		printf("01*tmp   [%s]\n", tmp);
-		BR;
+	*ptr = '\0';
 	while (*buffer)
 	{
-		printf("02*buffer[%s]\n", buffer);//TODO
-		printf("02*tmp   [%s]\n", tmp);//TODO
-		BR;
-		*buffer++ = *tmp++;
+		*ptrb++ = *buffer++;
 	}
-	*tmp = '\0';
+	*ptr = '\0';
 	return (1);
 }
 /**
@@ -66,25 +66,18 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
-	tmp = NULL;
 	buff[fd][0] = '\0';
-	size_t debug;
-	while (!(debug = len_chrchr(buff[fd], '\n')))
+	while (!(len_chrchr(buff[fd], '\n')))
 	{
 		rret = next_line(buff[fd], fd);
-											printf("buff|\n""%s\n""rret :[%lu]\n""debug:[%lu]\n",buff[fd], rret, debug);
-											BR;
 		if (!rret)
 			break ;
 		else if (rret == -1)
 			return (NULL);
 		while (len_chrchr(buff[fd], '\n'))
 		{
-			if(!buff_manager(buff[fd], tmp))//WIP
+			if(!buff_manager(buff[fd], &tmp))//WIP
 				return (NULL);
-			
-											printf("buff|\n""%s\n""tmp :[%s]\n",buff[fd],tmp);
-											BR;
 		}
 	}
 	return (NULL);
@@ -106,7 +99,8 @@ int	main(int ac, char **av)
 	while ((str = get_next_line(fd)))
 	{
 		printf("%s\n", str);
-		free(str);
+		if (str)
+			free(str);
 	}
 	close(fd);
 	return (0);
