@@ -6,49 +6,11 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 12:17:09 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 14:15:36 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-int	buff_manager(char *buffer, char **tmp)
-{
-	char *ptr;
-	char *ptrb;
-
-	ptrb = buffer;
-	*tmp = (char *)malloc(sizeof(char) * (len_chrchr(buffer, '\n') + 1));
-	ptr = *tmp;
-	if (!*tmp)
-		return (0);
-	while (*buffer && !(*buffer == '\n'))
-	{
-		*ptr++ = *buffer++;
-	}
-	*ptr = '\0';
-	while (*buffer)
-	{
-		*ptrb++ = *buffer++;
-	}
-	*ptrb = '\0';
-	return (1);
-}
-/**
- * @brief 
- * 
- * @param buff 
- * @return int 
- */
-ssize_t		next_line(char *buff, int fd)
-{
-	ssize_t	ret;
-
-	ret = read(fd, buff, BUFFER_SIZE);
-	if (ret > 0)
-		buff[ret] = '\0';
-	return (ret);
-}
 
 
 void	debug_nl(char *str)
@@ -65,6 +27,22 @@ void	debug_nl(char *str)
 }
 
 /**
+ * @brief 
+ * 
+ * @param buff 
+ * @return int 
+ */
+ssize_t		next_line(char *buff, int fd)
+{
+	ssize_t	ret;
+
+	ret = read(fd, buff, BUFFER_SIZE);
+	if (ret > 0)
+		buff[ret] = '\0';
+	return (ret);
+}
+
+/**
  * @brief Get the next line object
  *
  * @param fd File descriptor to read from.
@@ -73,26 +51,32 @@ void	debug_nl(char *str)
  */
 char	*get_next_line(int fd)
 {
-	static char	buff[OPEN_MAX][BUFFER_SIZE + 1];
-	char		*tmp;
+	char		buff[BUFFER_SIZE + 1];
+	static char	*tmp[OPEN_MAX];
 	ssize_t		rret;
 
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
-	buff[fd][0] = '\0';
-	while (!len_chrchr(buff[fd], '\n'))
+	tmp[fd] = NULL;
+	while (!len_chrchr(tmp[fd], '\n'))
 	{
-		rret = next_line(buff[fd], fd);
-		if (!rret)
-			break ;
-		else if (rret == -1)
-			return (NULL);
+		rret = next_line(buff, fd);
+		if (!rret || rret == -1)
+			return (free_return(&tmp[fd]));
+		puts("====buff nextline===");
+		debug_nl(buff);
+		BR;
+		if (!len_chrchr(tmp[fd], '\n'))
+		{
+			tmp[fd] = strjoin_and_free(&(tmp[fd]), buff);
+			if (!tmp[fd])
+				return (free_return(&tmp[fd]));
+			puts("====strjoin===");
+			debug_nl(tmp[fd]);
+			BR;
+		}
 	}
-	debug_nl(buff[fd]);
-	BR;
-	if(!buff_manager(buff[fd], &tmp))//WIP
-		return (NULL);
-	return (tmp);
+	return ("UwU");
 }
 
 #include <fcntl.h>
@@ -110,7 +94,7 @@ int	main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	while ((str = get_next_line(fd)))
 	{
-		// printf("%s\n", str);
+		printf("%s\n", str);
 		// if (str)
 			// free(str);
 	}

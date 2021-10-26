@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/21 17:06:49 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 13:56:10 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,6 @@ ssize_t	next_line(char *buff, int fd);
 /*.-| get_next_line_utils.c |-.*/
 
 size_t	len_chrchr(char *str, char c);
-
+char	*strjoin_and_free(char **s1, char const *s2);
+char	*free_return(char **ptr);
 # endif
