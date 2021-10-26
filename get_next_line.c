@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/21 17:15:40 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 12:17:09 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ int	buff_manager(char *buffer, char **tmp)
 	char *ptr;
 	char *ptrb;
 
-	ptr = *tmp;
 	ptrb = buffer;
 	*tmp = (char *)malloc(sizeof(char) * (len_chrchr(buffer, '\n') + 1));
+	ptr = *tmp;
 	if (!*tmp)
 		return (0);
-	printf("Buffer:[[%s]]\n", buffer);
 	while (*buffer && !(*buffer == '\n'))
 	{
 		*ptr++ = *buffer++;
@@ -32,7 +31,7 @@ int	buff_manager(char *buffer, char **tmp)
 	{
 		*ptrb++ = *buffer++;
 	}
-	*ptr = '\0';
+	*ptrb = '\0';
 	return (1);
 }
 /**
@@ -51,6 +50,20 @@ ssize_t		next_line(char *buff, int fd)
 	return (ret);
 }
 
+
+void	debug_nl(char *str)
+{
+	while (str && *str)
+	{
+		if (*str == '\n')
+			printf("[\\n]");
+		else
+			putchar(*str);
+		str++;
+	}
+	puts("\n");
+}
+
 /**
  * @brief Get the next line object
  *
@@ -67,20 +80,19 @@ char	*get_next_line(int fd)
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	buff[fd][0] = '\0';
-	while (!(len_chrchr(buff[fd], '\n')))
+	while (!len_chrchr(buff[fd], '\n'))
 	{
 		rret = next_line(buff[fd], fd);
 		if (!rret)
 			break ;
 		else if (rret == -1)
 			return (NULL);
-		while (len_chrchr(buff[fd], '\n'))
-		{
-			if(!buff_manager(buff[fd], &tmp))//WIP
-				return (NULL);
-		}
 	}
-	return (NULL);
+	debug_nl(buff[fd]);
+	BR;
+	if(!buff_manager(buff[fd], &tmp))//WIP
+		return (NULL);
+	return (tmp);
 }
 
 #include <fcntl.h>
@@ -98,9 +110,9 @@ int	main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	while ((str = get_next_line(fd)))
 	{
-		printf("%s\n", str);
-		if (str)
-			free(str);
+		// printf("%s\n", str);
+		// if (str)
+			// free(str);
 	}
 	close(fd);
 	return (0);
