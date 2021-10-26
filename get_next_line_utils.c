@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:58 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 15:35:15 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 17:13:40 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*strjoin_and_free(char **s1, char const *s2)
 	while (s2 && *s2)
 		*ret++ = *s2++;
 	*ret = '\0';
-	// printf("ret:|%s|\n", ret_ptr);
+	printf("ret:|%s|\n", ret_ptr);
 	if (s1 && *s1)
 		free (*s1);
 	return (ret_ptr);

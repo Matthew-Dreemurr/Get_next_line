@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 15:51:54 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 17:12:12 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,9 @@ char	*get_next_line(int fd)
 		gnl[fd].rret = read_next_line(gnl[fd].buff, fd);
 		if (!gnl[fd].rret || gnl[fd].rret == -1)
 			return (free_return(&gnl[fd].tmp));
-		// puts("====buff nextline===");
-		// debug_nl(gnl[fd].buff);
-		// BR;
 		gnl[fd].tmp = strjoin_and_free(&gnl[fd].tmp, gnl[fd].buff);
 		if (!gnl[fd].tmp)
 			return (free_return(&gnl[fd].tmp));
-		// puts("====strjoin===");
-		// debug_nl(gnl[fd].tmp);
-		// BR;
 	}
 	return (ret_next_line(&gnl[fd].tmp));
 }

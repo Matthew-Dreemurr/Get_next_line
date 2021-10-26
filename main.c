@@ -15,11 +15,13 @@ int	main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	while ((str = get_next_line(fd)))
 	{
-		// printf("[%-5d]:|%s|", i, str);
+		printf("[%-5d]:|%s|", i, str);
 		if (str)
 			free(str);
 		i++;
 	}
+	if (!str)
+		printf("NULL\n");
 	close(fd);
 	return (0);
 }
