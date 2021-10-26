@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 14:26:12 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 15:21:46 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,15 @@ size_t	len_chrchr(char *str, char c);
 char	*alloc_init(const char *s1, const char *s2);
 char	*strjoin_and_free(char **s1, char const *s2);
 char	*free_return(char **ptr);
+
+/*.-| struct |-.*/
+
+typedef struct s_gnl
+{
+	char	buff[BUFFER_SIZE + 1];
+	char	*tmp;
+	ssize_t	rret;
+}				t_gnl;
+
+
 # endif

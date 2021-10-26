@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 14:25:08 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 15:51:54 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,27 @@ void	debug_nl(char *str)
 char	*ret_next_line(char **str)
 {
 	char	*ret;
-	ret = alloc_init(*str, NULL);
-	return (NULL);
+	char	*str_ptr;
+	char	*ptr;
+
+	ret = (char *)malloc((1 + len_chrchr(*str, '\n')) * sizeof(char));
+	if (!ret)
+		return (NULL);
+	str_ptr = *str;
+	ptr = ret;
+	while (*str_ptr)
+	{
+		*ptr++ = *str_ptr;
+		if (*str_ptr++ == '\n')
+			break ;
+	}
+	*ptr = '\0';
+	ptr = *str;
+	while (*str_ptr)
+		*ptr++ = *str_ptr++;
+	*ptr = '\0';
+	// printf("ret_next_line |||%s|||\n", ret);
+	return (ret);
 }
 
 /**
@@ -58,50 +77,26 @@ ssize_t		read_next_line(char *buff, int fd)
  */
 char	*get_next_line(int fd)
 {
-	char		buff[BUFFER_SIZE + 1];
-	static char	*tmp[OPEN_MAX];
-	ssize_t		rret;
+	static t_gnl	gnl[OPEN_MAX];
 
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
-	tmp[fd] = NULL;
-	while (!len_chrchr(tmp[fd], '\n'))
+	gnl[fd].rret = 1;
+	gnl[fd].buff[0] = '\0';
+	while (gnl[fd].rret > 0 && !len_chrchr(gnl[fd].buff, '\n'))
 	{
-		rret = read_next_line(buff, fd);
-		if (!rret || rret == -1)
-			return (free_return(&tmp[fd]));
-		puts("====buff nextline===");
-		debug_nl(buff);
-		BR;
-		tmp[fd] = strjoin_and_free(&tmp[fd], buff);
-		if (!tmp[fd])
-			return (free_return(&tmp[fd]));
-		puts("====strjoin===");
-		debug_nl(tmp[fd]);
-		BR;
+		gnl[fd].rret = read_next_line(gnl[fd].buff, fd);
+		if (!gnl[fd].rret || gnl[fd].rret == -1)
+			return (free_return(&gnl[fd].tmp));
+		// puts("====buff nextline===");
+		// debug_nl(gnl[fd].buff);
+		// BR;
+		gnl[fd].tmp = strjoin_and_free(&gnl[fd].tmp, gnl[fd].buff);
+		if (!gnl[fd].tmp)
+			return (free_return(&gnl[fd].tmp));
+		// puts("====strjoin===");
+		// debug_nl(gnl[fd].tmp);
+		// BR;
 	}
-	return (ret_next_line(&tmp[fd]));
-}
-
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-int	main(int ac, char **av)
-{
-	char	*str;
-	int		fd;
-
-	setbuf(stdout, NULL);
-	if (ac != 2)
-		return (0);
-	fd = open(av[1], O_RDONLY);
-	while ((str = get_next_line(fd)))
-	{
-		printf("%s\n", str);
-		// if (str)
-			// free(str);
-	}
-	close(fd);
-	return (0);
+	return (ret_next_line(&gnl[fd].tmp));
 }

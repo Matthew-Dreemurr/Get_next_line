@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:58 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 14:26:01 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/26 15:35:15 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*alloc_init(const char *s1, const char *s2)
 		s1_p++;
 	while (s2_p && *s2_p)
 		s2_p++;
-	printf("malloc size:%lu\n",(1 + (s1_p - s1) + (s2_p - s2)));
+	// printf("malloc size:%lu\n",(1 + (s1_p - s1) + (s2_p - s2)));
 	return ((char *)malloc(sizeof(char) * (1 + (s1_p - s1) + (s2_p - s2))));
 }
 
