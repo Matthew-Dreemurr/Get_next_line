@@ -19,6 +19,7 @@ int	main(int ac, char **av)
 		if (str)
 			free(str);
 		i++;
+		printf("======= END =======\n");
 	}
 	if (!str)
 		printf("NULL\n");

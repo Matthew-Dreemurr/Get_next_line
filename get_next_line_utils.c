@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:58 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/28 16:22:08 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/28 16:57:55 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ char	*strjoin_and_free(char **s1, char const *s2)
 
 char	*free_return(char **ptr)
 {
+	printf("FREEE RETUUUUURN !!\n");
 	if (*ptr)
 		free(*ptr);
 	return (NULL);
