@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:58 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 17:13:40 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/28 16:22:08 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,19 @@ size_t	len_chrchr(char *str, char c)
 		str++;
 	else
 		return (0);
+	printf("LEN[%lu]\n", (size_t)(str - start));
 	return ((size_t)(str - start));
 }
 
+size_t	strlen_protect(const char *s)
+{
+	char	*start;
+
+	start = (char *)s;
+	while (s && *s)
+		s++;
+	return ((size_t)(s - start));
+}
 /**
  * @brief malloc size of (`s1` + `s2` + 1).
  *        `s1` and `s2` can be NULL.
@@ -83,7 +93,7 @@ char	*strjoin_and_free(char **s1, char const *s2)
 	while (s2 && *s2)
 		*ret++ = *s2++;
 	*ret = '\0';
-	printf("ret:|%s|\n", ret_ptr);
+	// printf("ret:|%s|\n", ret_ptr);
 	if (s1 && *s1)
 		free (*s1);
 	return (ret_ptr);

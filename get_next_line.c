@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/26 17:12:12 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/28 16:26:22 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void	debug_nl(char *str)
 {
+	printf("\033[0;33m");
 	while (str && *str)
 	{
 		if (*str == '\n')
@@ -24,6 +25,7 @@ void	debug_nl(char *str)
 		str++;
 	}
 	puts("\n");
+	printf("\033[0m");
 }
 
 char	*ret_next_line(char **str)
@@ -31,7 +33,8 @@ char	*ret_next_line(char **str)
 	char	*ret;
 	char	*str_ptr;
 	char	*ptr;
-
+	printf("START RET_NL\n");
+	debug_nl(*str);
 	ret = (char *)malloc((1 + len_chrchr(*str, '\n')) * sizeof(char));
 	if (!ret)
 		return (NULL);
@@ -45,10 +48,12 @@ char	*ret_next_line(char **str)
 	}
 	*ptr = '\0';
 	ptr = *str;
+	char *ptr_bg = ptr;
 	while (*str_ptr)
 		*ptr++ = *str_ptr++;
 	*ptr = '\0';
-	// printf("ret_next_line |||%s|||\n", ret);
+	printf("STOP RET_NL\n");
+	debug_nl(ptr_bg);
 	return (ret);
 }
 
@@ -83,14 +88,27 @@ char	*get_next_line(int fd)
 		return (NULL);
 	gnl[fd].rret = 1;
 	gnl[fd].buff[0] = '\0';
-	while (gnl[fd].rret > 0 && !len_chrchr(gnl[fd].buff, '\n'))
+	printf("START GNL\n");
+	debug_nl(gnl[fd].tmp);
+	while (gnl[fd].rret && !len_chrchr(gnl[fd].tmp, '\n'))
 	{
 		gnl[fd].rret = read_next_line(gnl[fd].buff, fd);
-		if (!gnl[fd].rret || gnl[fd].rret == -1)
+		if (gnl[fd].rret == -1)
 			return (free_return(&gnl[fd].tmp));
 		gnl[fd].tmp = strjoin_and_free(&gnl[fd].tmp, gnl[fd].buff);
 		if (!gnl[fd].tmp)
 			return (free_return(&gnl[fd].tmp));
+		// printf("|%s|\n", gnl[fd].tmp);
 	}
+	if (!len_chrchr(gnl[fd].tmp, '\n'))
+	{
+		printf("LAST CHECK GNL\n");
+		debug_nl(gnl[fd].tmp);
+		gnl[fd].tmp = strjoin_and_free(&gnl[fd].tmp, gnl[fd].buff);
+		if (!gnl[fd].tmp)
+			return (free_return(&gnl[fd].tmp));
+	}
+	printf("BEFOR RET_NL\n");
+	debug_nl(gnl[fd].tmp);
 	return (ret_next_line(&gnl[fd].tmp));
 }
