@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/28 15:37:30 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/28 17:40:13 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_gnl
 	char	buff[BUFFER_SIZE + 1];
 	char	*tmp;
 	ssize_t	rret;
+	int		eof;
 }				t_gnl;
 
 

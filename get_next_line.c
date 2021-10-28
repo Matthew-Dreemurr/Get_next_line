@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/28 17:22:01 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/10/28 17:46:43 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*ret_next_line(char **str)
 	}
 	*ptr = '\0';
 	ptr = *str;
-	char *ptr_bg = ptr;
 	while (*str_ptr)
 		*ptr++ = *str_ptr++;
 	*ptr = '\0';
@@ -80,12 +79,14 @@ char	*get_next_line(int fd)
 {
 	static t_gnl	gnl[OPEN_MAX];
 
+	printf("======= CALL =======\n");
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	gnl[fd].rret = 1;
 	gnl[fd].buff[0] = '\0';
-	while (gnl[fd].rret && !len_chrchr(gnl[fd].tmp, '\n'))
+	while (gnl[fd].rret && !len_chrchr(gnl[fd].buff, '\n'))
 	{
+		gnl[fd].eof = 0;
 		gnl[fd].rret = read_next_line(gnl[fd].buff, fd);
 		if (gnl[fd].rret == -1)
 			return (free_return(&gnl[fd].tmp));
@@ -93,8 +94,11 @@ char	*get_next_line(int fd)
 		if (!gnl[fd].tmp)
 			return (free_return(&gnl[fd].tmp));
 	}
+	// if (gnl[fd].eof)
+		// return (NULL); //TODO find a way to send the NULL for the EOF
 	if (!len_chrchr(gnl[fd].tmp, '\n'))
 	{
+		gnl[fd].eof = 1;
 		gnl[fd].tmp = strjoin_and_free(&gnl[fd].tmp, gnl[fd].buff);
 		if (!gnl[fd].tmp)
 			return (free_return(&gnl[fd].tmp));
