@@ -12,22 +12,12 @@
 
 #include "get_next_line.h"
 
-
-// void	debug_nl(char *str)
-// {
-// 	printf("\033[0;33m");
-// 	while (str && *str)
-// 	{
-// 		if (*str == '\n')
-// 			printf("[\\n]");
-// 		else
-// 			putchar(*str);
-// 		str++;
-// 	}
-// 	puts("\n");
-// 	printf("\033[0m");
-// }
-
+/**
+ * @brief 
+ * 
+ * @param str 
+ * @return char* 
+ */
 char	*ret_next_line(char **str)
 {
 	char	*ret;
@@ -49,14 +39,15 @@ char	*ret_next_line(char **str)
 	while (*str_ptr)
 		*ptr++ = *str_ptr++;
 	*ptr = '\0';
+	printf("retnextline: |"); debug_nl(ret);
 	return (ret);
 }
 
 /**
- * @brief 
+ * @brief Read in the `fd`, write in `buff` and terminate the string /w a '\0'.
  * 
- * @param buff 
- * @return int 
+ * @param buff
+ * @return int
  */
 ssize_t		read_next_line(char *buff, int fd)
 {
@@ -65,6 +56,7 @@ ssize_t		read_next_line(char *buff, int fd)
 	ret = read(fd, buff, BUFFER_SIZE);
 	if (ret > 0)
 		buff[ret] = '\0';
+	printf("READ: |"); debug_nl(buff);
 	return (ret);
 }
 
@@ -77,32 +69,33 @@ ssize_t		read_next_line(char *buff, int fd)
  */
 char	*get_next_line(int fd)
 {
-	static t_gnl	gnl[OPEN_MAX];
+	static char		*tmp[OPEN_MAX];
+	char			buff[BUFFER_SIZE + 1];
+	ssize_t			rret;
+	char	*debug;
 
-	printf("======= CALL =======\n");
+	puts("====== CALL ======");
+
 	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
-	gnl[fd].rret = 1;
-	gnl[fd].buff[0] = '\0';
-	while (gnl[fd].rret && !len_chrchr(gnl[fd].buff, '\n'))
-	{
-		gnl[fd].eof = 0;
-		gnl[fd].rret = read_next_line(gnl[fd].buff, fd);
-		if (gnl[fd].rret == -1)
-			return (free_return(&gnl[fd].tmp));
-		gnl[fd].tmp = strjoin_and_free(&gnl[fd].tmp, gnl[fd].buff);
-		if (!gnl[fd].tmp)
-			return (free_return(&gnl[fd].tmp));
-	}
-	// if (gnl[fd].eof)
-		// return (NULL); //TODO find a way to send the NULL for the EOF
-	if (!len_chrchr(gnl[fd].tmp, '\n'))
-	{
-		gnl[fd].eof = 1;
-		gnl[fd].tmp = strjoin_and_free(&gnl[fd].tmp, gnl[fd].buff);
-		if (!gnl[fd].tmp)
-			return (free_return(&gnl[fd].tmp));
-		return (gnl[fd].tmp);
-	}
-	return (ret_next_line(&gnl[fd].tmp));
+	buff[0] = '\0';
+	printf("LAST tmp[fd]: |"); debug_nl(tmp[fd]);
+	rret = read_next_line(buff, fd);
+	if (rret < 0)
+		return (NULL);
+
+	//On met ce qui a ete lu dans tmp
+	tmp[fd] = strjoin_and_free(&tmp[fd], buff);
+	printf("FIRST JOIN: |"); debug_nl(tmp[fd]);
+
+	//Si le buffer n'as pas pas de '\n' on relis jusqu'a en trouver un en recursif
+	//On renvois la concatneation du nouveau read avec les reste dans tmp
+	if (!len_chrchr(tmp[fd], '\n') && rret)
+		return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
+	printf("FINAL TMP: |"); debug_nl(tmp[fd]);
+	
+	debug = ret_next_line(&tmp[fd]);
+	printf("RETURN: |"); debug_nl(debug);
+	printf("leftover tmp[fd]: |"); debug_nl(tmp[fd]);
+	return (debug);
 }

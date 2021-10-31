@@ -17,6 +17,7 @@
 #define BR getchar();
 #define BRP(x) printf(x);
 #include <stdio.h>
+void	debug_nl(char *str);
 /*._-=-_._-=-_. [//TODO REMOVE] ._-=-_._-=-_.*/
 
 /*._-=-_._-=-_. [includes] ._-=-_._-=-_.*/
@@ -44,16 +45,5 @@ char	*alloc_init(const char *s1, const char *s2);
 char	*strjoin_and_free(char **s1, char const *s2);
 char	*free_return(char **ptr);
 size_t	strlen_protect(const char *s);
-
-/*.-| struct |-.*/
-
-typedef struct s_gnl
-{
-	char	buff[BUFFER_SIZE + 1];
-	char	*tmp;
-	ssize_t	rret;
-	int		eof;
-}				t_gnl;
-
 
 # endif
