@@ -17,7 +17,7 @@
 #define BR getchar();
 #define BRP(x) printf(x);
 #include <stdio.h>
-void	debug_nl(char *str);
+void	debug_nl(const char *str);
 /*._-=-_._-=-_. [//TODO REMOVE] ._-=-_._-=-_.*/
 
 /*._-=-_._-=-_. [includes] ._-=-_._-=-_.*/

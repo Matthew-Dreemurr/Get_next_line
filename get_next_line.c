@@ -72,7 +72,7 @@ char	*get_next_line(int fd)
 	static char		*tmp[OPEN_MAX];
 	char			buff[BUFFER_SIZE + 1];
 	ssize_t			rret;
-	char	*debug;
+	const char		*debug;
 
 	puts("====== CALL ======");
 
@@ -95,7 +95,7 @@ char	*get_next_line(int fd)
 	printf("FINAL TMP: |"); debug_nl(tmp[fd]);
 	
 	debug = ret_next_line(&tmp[fd]);
-	printf("RETURN: |"); debug_nl(debug);
 	printf("leftover tmp[fd]: |"); debug_nl(tmp[fd]);
-	return (debug);
+	printf("RETURN: [%p]|", &*debug); debug_nl(debug);
+	return ((char *)debug);
 }

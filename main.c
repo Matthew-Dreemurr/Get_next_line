@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	debug_nl(char *str)
+void	debug_nl(const char *str)
 {
 	printf("\033[0;33m");
 	while (str && *str)
@@ -30,7 +30,7 @@ int	main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	/*while ((*/str = get_next_line(fd);/*))*/
 	// {
-		printf("[%-5d]: |", i); debug_nl(str);
+		printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
 		if (str)
 			free(str);
 		// i++;
