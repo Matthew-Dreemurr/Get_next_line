@@ -39,7 +39,7 @@ char	*ret_next_line(char **str)
 	while (*str_ptr)
 		*ptr++ = *str_ptr++;
 	*ptr = '\0';
-	printf("retnextline: |"); debug_nl(ret);
+	printf("retnextline: [%p]|", &*ret); debug_nl(ret);
 	return (ret);
 }
 
@@ -77,12 +77,18 @@ char	*get_next_line(int fd)
 	puts("====== CALL ======");
 
 	if (fd < 0 || fd > OPEN_MAX)
+	{
+		puts("\033[0;31m""return 0""\033[0m");
 		return (NULL);
+	}
 	buff[0] = '\0';
 	printf("LAST tmp[fd]: |"); debug_nl(tmp[fd]);
 	rret = read_next_line(buff, fd);
 	if (rret < 0)
+	{
+		puts("\033[0;31m""return 1""\033[0m");
 		return (NULL);
+	}
 
 	//On met ce qui a ete lu dans tmp
 	tmp[fd] = strjoin_and_free(&tmp[fd], buff);
@@ -91,7 +97,10 @@ char	*get_next_line(int fd)
 	//Si le buffer n'as pas pas de '\n' on relis jusqu'a en trouver un en recursif
 	//On renvois la concatneation du nouveau read avec les reste dans tmp
 	if (!len_chrchr(tmp[fd], '\n') && rret)
+	{
+		puts("\033[0;31m""return 2""\033[0m");
 		return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
+	}
 	printf("FINAL TMP: |"); debug_nl(tmp[fd]);
 	
 	debug = ret_next_line(&tmp[fd]);

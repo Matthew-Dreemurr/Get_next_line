@@ -20,7 +20,7 @@ void	debug_nl(const char *str)
 
 int	main(int ac, char **av)
 {
-	char	*str;
+	char	*str = NULL;
 	int		fd;
 	int		i = 0;
 
