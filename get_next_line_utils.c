@@ -70,6 +70,7 @@ char	*alloc_init(const char *s1, const char *s2)
  *        string, which is the result of the concatenation
  *        of ’s1’ and ’s2’ and free the `s1`.
  *        `s1` and `s2` can be NULL.
+ *        In case dat alloc fail, `*s1` will be free.
  *
  * @param s1 The prefix string can be NULL.
  * @param s2 The suffix string can be NULL.
@@ -83,7 +84,7 @@ char	*strjoin_and_free(char **s1, char const *s2)
 
 	ret = alloc_init(*s1, s2);
 	if (!ret)
-		return (NULL);
+		return (free_return(s1));
 	s1_ptr = *s1;
 	ret_ptr = ret;
 	while (s1_ptr && *s1_ptr)
@@ -92,13 +93,15 @@ char	*strjoin_and_free(char **s1, char const *s2)
 		*ret++ = *s2++;
 	*ret = '\0';
 	if (s1 && *s1)
+	{
 		free (*s1);
+		*s1 = NULL;
+	}
 	return (ret_ptr);
 }
 
 char	*free_return(char **ptr)
 {
-	printf("FREEE RETUUUUURN !!\n");
 	if (*ptr)
 		free(*ptr);
 	return (NULL);

@@ -14,11 +14,11 @@
 # define GET_NEXT_LINE_H
 
 /*._-=-_._-=-_. [//TODO REMOVE] ._-=-_._-=-_.*/
-#define BR getchar();
-#define BRP(x) printf(x);
+// #define BR getchar();
+// #define BRP(x) printf(x);
 #include <stdio.h>
 void	debug_nl(const char *str);
-#include "wraloc.h"
+// #include "wraloc.h"
 /*._-=-_._-=-_. [//TODO REMOVE] ._-=-_._-=-_.*/
 
 /*._-=-_._-=-_. [includes] ._-=-_._-=-_.*/
@@ -36,7 +36,7 @@ void	debug_nl(const char *str);
 /*.-| get_next_line.c |-.*/
 
 char	*get_next_line(int fd);
-char	*read_next_line(int fd);
+ssize_t	read_next_line(char *buff, int fd);
 char	*ret_next_line(char **str);
 
 /*.-| get_next_line_utils.c |-.*/
@@ -47,4 +47,11 @@ char	*strjoin_and_free(char **s1, char const *s2);
 char	*free_return(char **ptr);
 size_t	strlen_protect(const char *s);
 
+
+typedef struct	s_box
+{
+	char		*tmp[FOPEN_MAX];
+	char		*buff;
+	ssize_t		r_ret;
+}				t_box;
 # endif

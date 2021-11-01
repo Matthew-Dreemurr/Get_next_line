@@ -13,7 +13,7 @@
 #include "get_next_line.h"
 
 /**
- * @brief 
+ * @brief If malloc fail free `*str`
  * 
  * @param str 
  * @return char* 
@@ -23,9 +23,10 @@ char	*ret_next_line(char **str)
 	char	*ret;
 	char	*str_ptr;
 	char	*ptr;
+
 	ret = (char *)malloc((1 + len_chrchr(*str, '\n')) * sizeof(char));
 	if (!ret)
-		return (NULL);
+		return (free_return(str));
 	str_ptr = *str;
 	ptr = ret;
 	while (*str_ptr)
@@ -48,22 +49,26 @@ char	*ret_next_line(char **str)
  * @param buff
  * @return int
  */
-char	*read_next_line(int fd)
+ssize_t	read_next_line(char *buff, int fd)
 {
-	ssize_t	read_ret;
-	char	*ret;
-	char	buff[BUFFER_SIZE + 1];
+	ssize_t	ret;
 
-	ret = NULL;
-	read_ret = read(fd, buff, BUFFER_SIZE);
-	if (read_ret < 1)
-		return (NULL);
-	buff[read_ret] = '\0';
-	printf("READ |");debug_nl(buff);
-	ret = strjoin_and_free(&ret, buff);
-	if (!len_chrchr(ret, '\n') && read_ret)
-		return (strjoin_and_free(&ret, read_next_line(fd)));
+	ret = read(fd, buff, BUFFER_SIZE);
+	if (ret > 0)
+		buff[ret] = '\0';
 	return (ret);
+}
+
+/**
+ * @brief The only way i find to check if we have enough space for the buff
+ * 
+ * @param ptr 
+ * @return char* 
+ */
+char	*alloc_buffer(char **ptr)
+{
+	*ptr = (char *)malloc((sizeof(char) * BUFFER_SIZE) + 1);
+	return (*ptr);
 }
 
 /**
@@ -75,22 +80,29 @@ char	*read_next_line(int fd)
  */
 char	*get_next_line(int fd)
 {
-	static char		*tmp[OPEN_MAX];
-	const char		*debug;
+	static t_box b[fd];
 
-	if (fd < 0 || fd > FOPEN_MAX)
+	if ((fd < 0 || fd > FOPEN_MAX))
 		return (NULL);
-	tmp[fd] = read_next_line(fd);
-	if (!tmp[fd])
-		return (NULL);
-	//On met ce qui a ete lu dans tmp
-
-	//Si le buffer n'as pas pas de '\n' on relis jusqu'a en trouver un en recursif
-	//On renvois la concatneation du nouveau read avec les reste dans tmp
-	// if (!len_chrchr(tmp[fd], '\n') && rret)
-		// return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
-	printf("leftover |"); debug_nl(tmp[fd]);
-	debug = ret_next_line(&tmp[fd]);
-	printf("leftover clean |"); debug_nl(tmp[fd]);
-	printf("return |"); debug_nl(debug); return ((char *)debug);
+	if (!alloc_buffer(&buff))
+		return (NULL);//TODO change var
+	r_ret = 1;
+	buff[0] = '\0';
+	while (r_ret && !len_chrchr(buff, '\n'))
+	{
+		r_ret = read_next_line(buff, fd);
+		if (r_ret < 0)
+			return (NULL);
+		if (r_ret)
+			tmp[fd] = strjoin_and_free(&tmp[fd], buff);
+		if (!tmp[fd])
+			return (free_return(&buff));
+	}
+	free(buff);
+	if (len_chrchr(tmp[fd], '\n'))
+		return (ret_next_line(&tmp[fd]));
+	else if (!strlen_protect(tmp[fd]))
+		return (free_return(&tmp[fd]));
+	else
+		return (strjoin_and_free(&tmp[fd], NULL));
 }
