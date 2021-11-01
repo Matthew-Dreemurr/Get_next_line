@@ -39,7 +39,6 @@ char	*ret_next_line(char **str)
 	while (*str_ptr)
 		*ptr++ = *str_ptr++;
 	*ptr = '\0';
-	printf("retnextline: [%p]|", &*ret); debug_nl(ret);
 	return (ret);
 }
 
@@ -56,7 +55,6 @@ ssize_t		read_next_line(char *buff, int fd)
 	ret = read(fd, buff, BUFFER_SIZE);
 	if (ret > 0)
 		buff[ret] = '\0';
-	printf("READ: |"); debug_nl(buff);
 	return (ret);
 }
 
@@ -74,37 +72,28 @@ char	*get_next_line(int fd)
 	ssize_t			rret;
 	const char		*debug;
 
-	puts("====== CALL ======");
-
 	if (fd < 0 || fd > OPEN_MAX)
 	{
-		puts("\033[0;31m""return 0""\033[0m");
-		return (NULL);
+		puts("[[1]]");return (NULL);
 	}
 	buff[0] = '\0';
-	printf("LAST tmp[fd]: |"); debug_nl(tmp[fd]);
 	rret = read_next_line(buff, fd);
 	if (rret < 0)
 	{
-		puts("\033[0;31m""return 1""\033[0m");
-		return (NULL);
+		puts("[[2]]");return (NULL);
 	}
 
 	//On met ce qui a ete lu dans tmp
 	tmp[fd] = strjoin_and_free(&tmp[fd], buff);
-	printf("FIRST JOIN: |"); debug_nl(tmp[fd]);
 
 	//Si le buffer n'as pas pas de '\n' on relis jusqu'a en trouver un en recursif
 	//On renvois la concatneation du nouveau read avec les reste dans tmp
 	if (!len_chrchr(tmp[fd], '\n') && rret)
 	{
-		puts("\033[0;31m""return 2""\033[0m");
-		return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
+		puts("[[CALL GNL]]");
+		puts("[[3]]");return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
 	}
-	printf("FINAL TMP: |"); debug_nl(tmp[fd]);
 	
 	debug = ret_next_line(&tmp[fd]);
-	printf("leftover tmp[fd]: |"); debug_nl(tmp[fd]);
-	printf("RETURN: [%p]|", &*debug); debug_nl(debug);
-	return ((char *)debug);
+	puts("[[4]]");return ((char *)debug);
 }
