@@ -71,6 +71,16 @@ char	*alloc_buffer(char **ptr)
 	return (*ptr);
 }
 
+char	*return_manager(char *tmp)
+{
+	if (len_chrchr(tmp, '\n'))
+		return (ret_next_line(&tmp));
+	else if (!strlen_protect(tmp))
+		return (free_return(&tmp));
+	else
+		return (strjoin_and_free(&tmp, NULL));
+}
+
 /**
  * @brief Get the next line object
  *
@@ -80,29 +90,29 @@ char	*alloc_buffer(char **ptr)
  */
 char	*get_next_line(int fd)
 {
-	static t_box b[fd];
+	static t_box	b[FOPEN_MAX];
 
-	if ((fd < 0 || fd > FOPEN_MAX))
+	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE < 1)
 		return (NULL);
-	if (!alloc_buffer(&buff))
-		return (NULL);//TODO change var
-	r_ret = 1;
-	buff[0] = '\0';
-	while (r_ret && !len_chrchr(buff, '\n'))
+	if (!alloc_buffer(&b[fd].buff))
+		return (NULL);
+	b[fd].r_ret = 1;
+	b[fd].buff[0] = '\0';
+	b[fd].tmp = NULL;
+	while (b[fd].r_ret && !len_chrchr(b[fd].buff, '\n'))
 	{
-		r_ret = read_next_line(buff, fd);
-		if (r_ret < 0)
-			return (NULL);
-		if (r_ret)
-			tmp[fd] = strjoin_and_free(&tmp[fd], buff);
-		if (!tmp[fd])
-			return (free_return(&buff));
+		b[fd].r_ret = read_next_line(b[fd].buff, fd);
+		if (b[fd].r_ret < 0)
+		{
+			if (b[fd].tmp)
+				free(b[fd].tmp);
+			return (free_return(&b[fd].buff));
+		}
+		if (b[fd].r_ret)
+			b[fd].tmp = strjoin_and_free(&(b[fd].tmp), b[fd].buff);
+		if (!b[fd].tmp)
+			return (free_return(&(b[fd].buff)));
 	}
-	free(buff);
-	if (len_chrchr(tmp[fd], '\n'))
-		return (ret_next_line(&tmp[fd]));
-	else if (!strlen_protect(tmp[fd]))
-		return (free_return(&tmp[fd]));
-	else
-		return (strjoin_and_free(&tmp[fd], NULL));
+	free(b[fd].buff);
+	return (return_manager(b[fd].tmp));
 }

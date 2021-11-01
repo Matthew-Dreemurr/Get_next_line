@@ -18,7 +18,7 @@
 // #define BRP(x) printf(x);
 #include <stdio.h>
 void	debug_nl(const char *str);
-// #include "wraloc.h"
+#include "wraloc.h"
 /*._-=-_._-=-_. [//TODO REMOVE] ._-=-_._-=-_.*/
 
 /*._-=-_._-=-_. [includes] ._-=-_._-=-_.*/
@@ -28,9 +28,9 @@ void	debug_nl(const char *str);
 # include <stdlib.h>
 
 /*._-=-_._-=-_. [define] ._-=-_._-=-_._-=-_.*/
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 128
-# endif
+// # ifndef BUFFER_SIZE
+// #  define BUFFER_SIZE 128
+// # endif
 
 /*._-=-_._-=-_. [prototypes] ._-=-_._-=-_._-=-_.*/
 /*.-| get_next_line.c |-.*/
@@ -50,7 +50,7 @@ size_t	strlen_protect(const char *s);
 
 typedef struct	s_box
 {
-	char		*tmp[FOPEN_MAX];
+	char		*tmp;
 	char		*buff;
 	ssize_t		r_ret;
 }				t_box;
