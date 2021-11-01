@@ -56,9 +56,10 @@ char	*read_next_line(int fd)
 
 	ret = NULL;
 	read_ret = read(fd, buff, BUFFER_SIZE);
-	if (read_ret < 0)
+	if (read_ret < 1)
 		return (NULL);
 	buff[read_ret] = '\0';
+	printf("READ |");debug_nl(buff);
 	ret = strjoin_and_free(&ret, buff);
 	if (!len_chrchr(ret, '\n') && read_ret)
 		return (strjoin_and_free(&ret, read_next_line(fd)));
@@ -80,14 +81,16 @@ char	*get_next_line(int fd)
 	if (fd < 0 || fd > FOPEN_MAX)
 		return (NULL);
 	tmp[fd] = read_next_line(fd);
-
+	if (!tmp[fd])
+		return (NULL);
 	//On met ce qui a ete lu dans tmp
 
 	//Si le buffer n'as pas pas de '\n' on relis jusqu'a en trouver un en recursif
 	//On renvois la concatneation du nouveau read avec les reste dans tmp
 	// if (!len_chrchr(tmp[fd], '\n') && rret)
 		// return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
-	
+	printf("leftover |"); debug_nl(tmp[fd]);
 	debug = ret_next_line(&tmp[fd]);
-	return ((char *)debug);
+	printf("leftover clean |"); debug_nl(tmp[fd]);
+	printf("return |"); debug_nl(debug); return ((char *)debug);
 }

@@ -14,7 +14,7 @@ void	debug_nl(const char *str)
 			putchar(*str);
 		str++;
 	}
-	puts("\n");
+	printf("\n");
 	printf("\033[0m");
 }
 
@@ -28,15 +28,15 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (0);
 	fd = open(av[1], O_RDONLY);
-	/*while ((*/str = get_next_line(fd);/*))*/
-	// {
+	while ((str = get_next_line(fd)))
+	{
 		printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
 		if (str)
 			free(str);
-		// i++;
-	// }
-	// if (!str)
-		// printf("NULL\n");
+		i++;
+	}
+	if (!str)
+		printf("NULL\n");
 	close(fd);
 	return (0);
 }
