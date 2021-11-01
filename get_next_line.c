@@ -48,13 +48,20 @@ char	*ret_next_line(char **str)
  * @param buff
  * @return int
  */
-ssize_t		read_next_line(char *buff, int fd)
+char	*read_next_line(int fd)
 {
-	ssize_t	ret;
+	ssize_t	read_ret;
+	char	*ret;
+	char	buff[BUFFER_SIZE + 1];
 
-	ret = read(fd, buff, BUFFER_SIZE);
-	if (ret > 0)
-		buff[ret] = '\0';
+	ret = NULL;
+	read_ret = read(fd, buff, BUFFER_SIZE);
+	if (read_ret < 0)
+		return (NULL);
+	buff[read_ret] = '\0';
+	ret = strjoin_and_free(&ret, buff);
+	if (!len_chrchr(ret, '\n') && read_ret)
+		return (strjoin_and_free(&ret, read_next_line(fd)));
 	return (ret);
 }
 
@@ -68,32 +75,19 @@ ssize_t		read_next_line(char *buff, int fd)
 char	*get_next_line(int fd)
 {
 	static char		*tmp[OPEN_MAX];
-	char			buff[BUFFER_SIZE + 1];
-	ssize_t			rret;
 	const char		*debug;
 
 	if (fd < 0 || fd > FOPEN_MAX)
-	{
-		puts("[[1]]");return (NULL);
-	}
-	buff[0] = '\0';
-	rret = read_next_line(buff, fd);
-	if (rret < 0)
-	{
-		puts("[[2]]");return (NULL);
-	}
+		return (NULL);
+	tmp[fd] = read_next_line(fd);
 
 	//On met ce qui a ete lu dans tmp
-	tmp[fd] = strjoin_and_free(&tmp[fd], buff);
 
 	//Si le buffer n'as pas pas de '\n' on relis jusqu'a en trouver un en recursif
 	//On renvois la concatneation du nouveau read avec les reste dans tmp
-	if (!len_chrchr(tmp[fd], '\n') && rret)
-	{
-		puts("[[CALL GNL]]");
-		puts("[[3]]");return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
-	}
+	// if (!len_chrchr(tmp[fd], '\n') && rret)
+		// return (tmp[fd] = strjoin_and_free(&tmp[fd], get_next_line(fd)));
 	
 	debug = ret_next_line(&tmp[fd]);
-	puts("[[4]]");return ((char *)debug);
+	return ((char *)debug);
 }

@@ -36,7 +36,7 @@ void	debug_nl(const char *str);
 /*.-| get_next_line.c |-.*/
 
 char	*get_next_line(int fd);
-ssize_t	read_next_line(char *buff, int fd);
+char	*read_next_line(int fd);
 char	*ret_next_line(char **str);
 
 /*.-| get_next_line_utils.c |-.*/
