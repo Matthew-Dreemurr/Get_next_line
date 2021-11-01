@@ -72,7 +72,7 @@ char	*get_next_line(int fd)
 	ssize_t			rret;
 	const char		*debug;
 
-	if (fd < 0 || fd > OPEN_MAX)
+	if (fd < 0 || fd > FOPEN_MAX)
 	{
 		puts("[[1]]");return (NULL);
 	}
