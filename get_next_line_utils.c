@@ -6,39 +6,12 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:58 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/02 15:24:45 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/02 15:31:50 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/**
- * @brief `strlen` but whiout crash when `NULL` and stop count when find
- *         the first occurence of char `c`
- * 
- * @param str      the tring to pars
- * @param c        the caracter to find
- * @return size_t  the number of character befor `c` (`c` include)
- */
-size_t	len_chrchr(char *str, char c, size_t fill)
-{
-	char	*start;
-
-	start = str;
-	while (fill-- && *str != c)
-		str++;
-	return ((size_t)(str - start));
-}
-
-size_t	strlen_protect(const char *s)
-{
-	char	*start;
-
-	start = (char *)s;
-	while (s && *s)
-		s++;
-	return ((size_t)(s - start));
-}
 /**
  * @brief malloc size of (`s1` + `s2` + 1).
  *        `s1` and `s2` can be NULL.
@@ -121,8 +94,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	s += start;
-	// len_alloc = strlen_protect(s);
-	// len_alloc = (size_t []){len, len_alloc}[len_alloc < len];
 	str = (char *)malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);

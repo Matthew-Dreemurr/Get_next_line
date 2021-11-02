@@ -6,11 +6,39 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/02 15:26:57 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/02 15:31:55 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+/**
+ * @brief `strlen` but whiout crash when `NULL` and stop count when find
+ *         the first occurence of char `c`
+ * 
+ * @param str      the tring to pars
+ * @param c        the caracter to find
+ * @return size_t  the number of character befor `c` (`c` include)
+ */
+size_t	len_chrchr(char *str, char c, size_t fill)
+{
+	char	*start;
+
+	start = str;
+	while (fill-- && *str != c)
+		str++;
+	return ((size_t)(str - start));
+}
+
+size_t	strlen_protect(const char *s)
+{
+	char	*start;
+
+	start = (char *)s;
+	while (s && *s)
+		s++;
+	return ((size_t)(s - start));
+}
 
 void	manage_next_line(t_box *b)
 {
