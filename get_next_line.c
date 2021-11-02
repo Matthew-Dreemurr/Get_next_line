@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/10/28 17:46:43 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/02 12:09:52 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,6 @@ char	*alloc_buffer(char **ptr)
 	return (*ptr);
 }
 
-char	*return_manager(char *tmp)
-{
-	if (len_chrchr(tmp, '\n'))
-		return (ret_next_line(&tmp));
-	else if (!strlen_protect(tmp))
-		return (free_return(&tmp));
-	else
-		return (strjoin_and_free(&tmp, NULL));
-}
-
 /**
  * @brief Get the next line object
  *
@@ -99,20 +89,4 @@ char	*get_next_line(int fd)
 	b[fd].r_ret = 1;
 	b[fd].buff[0] = '\0';
 	b[fd].tmp = NULL;
-	while (b[fd].r_ret && !len_chrchr(b[fd].buff, '\n'))
-	{
-		b[fd].r_ret = read_next_line(b[fd].buff, fd);
-		if (b[fd].r_ret < 0)
-		{
-			if (b[fd].tmp)
-				free(b[fd].tmp);
-			return (free_return(&b[fd].buff));
-		}
-		if (b[fd].r_ret)
-			b[fd].tmp = strjoin_and_free(&(b[fd].tmp), b[fd].buff);
-		if (!b[fd].tmp)
-			return (free_return(&(b[fd].buff)));
-	}
-	free(b[fd].buff);
-	return (return_manager(b[fd].tmp));
 }
