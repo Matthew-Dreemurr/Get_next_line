@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/02 15:31:55 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/15 14:28:29 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,17 @@
  * @param c        the caracter to find
  * @return size_t  the number of character befor `c` (`c` include)
  */
-size_t	len_chrchr(char *str, char c, size_t fill)
+size_t	len_chrchr(char *str, char c)
 {
 	char	*start;
 
 	start = str;
-	while (fill-- && *str != c)
+	while (str && *str && *str != c)
 		str++;
+	if (str && *str == c)
+		str++;
+	else
+		return (0);
 	return ((size_t)(str - start));
 }
 
@@ -40,16 +44,29 @@ size_t	strlen_protect(const char *s)
 	return ((size_t)(s - start));
 }
 
-void	manage_next_line(t_box *b)
+char	*ret_next_line(char **str)
 {
-	b->fill += b->r_ret;
-	b->index = len_chrchr(b->buff, '\n', b->fill);
-	b->tmp = ft_substr(b->buff, 0, b->index + (b->index != b->fill));
-	b->r = strjoin_and_free(&b->r, b->tmp);
-	free(b->tmp);
-	ft_memcpy(b->buff, b->buff + b->index + (b->index != b->fill),
-		b->fill - b->index - (b->index != b->fill));
-	b->fill = b->fill - b->index - (b->index != b->fill);
+	char	*ret;
+	char	*str_ptr;
+	char	*ptr;
+
+	ret = (char *)malloc((1 + len_chrchr(*str, '\n')) * sizeof(char));
+	if (!ret)
+		return (NULL);
+	str_ptr = *str;
+	ptr = ret;
+	while (*str_ptr)
+	{
+		*ptr++ = *str_ptr;
+		if (*str_ptr++ == '\n')
+			break ;
+	}
+	*ptr = '\0';
+	ptr = *str;
+	while (*str_ptr)
+		*ptr++ = *str_ptr++;
+	*ptr = '\0';
+	return (ret);
 }
 
 /**
@@ -65,25 +82,22 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE < 1)
 		return (NULL);
-	b[fd].r = NULL;
 	while (1)
 	{
-		b[fd].r_ret = read(fd, (b[fd].buff + (b[fd].fill)),
-				BUFFER_SIZE - b[fd].fill);
-		if (!b[fd].r_ret && !b[fd].fill)
-		{
-			b[fd].fill = 0;
-			return (b[fd].r);
-		}
+		b[fd].r_ret = read(fd, b[fd].buff, BUFFER_SIZE);
 		if (b[fd].r_ret == -1)
-		{
-			b[fd].fill = 0;
 			return (NULL);
-		}
-		manage_next_line(&b[fd]);
-		if (b[fd].r && b[fd].r[0]
-			&& b[fd].r[strlen_protect(b[fd].r) - 1] == '\n')
+		b[fd].tmp = strjoin_and_free(&b[fd].tmp, b[fd].buff);
+		printf("|%s|\n", b[fd].tmp);
+		if (b[fd].r_ret && (len_chrchr(b[fd].tmp, '\n')))
 			break ;
+		if (!b[fd].tmp)
+			return (free_return(&b[fd].tmp));
+		if (!b[fd].r_ret && !b[fd].tmp[0])
+			return (free_return(&b[fd].tmp));
 	}
+	b[fd].r = ret_next_line(&b[fd].tmp);
+	if (!b[fd].r)
+		return (free_return(&b[fd].tmp));
 	return (b[fd].r);
 }

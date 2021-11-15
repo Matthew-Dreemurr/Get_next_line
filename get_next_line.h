@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/02 15:35:05 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/15 14:08:55 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
+# define BUFFER_SIZE 1
 
+// #include "wraloc.h"
 /*._-=-_._-=-_. [prototypes] ._-=-_._-=-_._-=-_.*/
 
 typedef struct s_box
@@ -41,6 +43,6 @@ char	*strjoin_and_free(char **s1, char const *s2);
 char	*free_return(char **ptr);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-size_t	len_chrchr(char *str, char c, size_t fill);
+size_t	len_chrchr(char *str, char c);
 
 #endif
