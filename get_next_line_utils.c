@@ -6,11 +6,28 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:58 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/16 13:46:02 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/16 15:25:37 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char		*dst_ptr;
+	const unsigned char	*src_ptr;
+
+	if (!dst && !src)
+		return (NULL);
+	dst_ptr = (unsigned char *)dst;
+	src_ptr = (unsigned const char *)src;
+	while (n > 0)
+	{
+		n--;
+		dst_ptr[n] = src_ptr[n];
+	}
+	return (dst);
+}
 
 char	*vect_init(t_vector *vec, size_t size)
 {
@@ -72,4 +89,17 @@ char	*vect_cat(t_vector *vec, char *str)
 		vec->buff[vec->len++] = *str++;
 	vec->buff[vec->len] = '\0';
 	return (vec->buff);
+}
+
+/**
+ * @brief Strlen but dont crash with a NULL pointer.
+ */
+size_t	strlen_protect(const char *s)
+{
+	char	*start;
+
+	start = (char *)s;
+	while (s && *s)
+		s++;
+	return ((size_t)(s - start));
 }

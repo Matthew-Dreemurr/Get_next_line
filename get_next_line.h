@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/16 13:43:01 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/16 15:25:49 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,6 @@
 
 /*._-=-_._-=-_. [prototypes] ._-=-_._-=-_._-=-_.*/
 
-typedef struct s_box
-{
-	char		*tmp;
-	t_vector	vec;
-	char		*res;
-	ssize_t		read_ret;
-}				t_box;
-
-char	*get_next_line(int fd);
-
-/*=={ src/vector }==*/
-
 # define VEC_EXIT_FAILURE ((void *)0)
 # define VEC_EXIT_SUCCESS ((int)1)
 # define VEC_BUFFER_SIZE  ((unsigned long)256)
@@ -57,8 +45,28 @@ typedef struct s_vector
 	char	*buff;
 }				t_vector;
 
+typedef struct s_box
+{
+	char		buffer[BUFFER_SIZE];
+	t_vector	vec;
+	char		*res;
+	ssize_t		read_ret;
+}				t_box;
+
+/*=={ get_next_line }==*/
+
+char	*get_next_line(int fd);
+char	*ret_next_line(t_box *data);
+void	clear_vect_next_line(char *src, char *dst, size_t *vec_len);
+char	*free_return(char *ptr, char *ret);
+
+/*=={ get_next_line_utils }==*/
+
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 char	*vect_init(t_vector *v, size_t size);
 char	*vect_resize(t_vector *v, size_t size);
 char	*vect_cat(t_vector *v, char *str);
+
+size_t	strlen_protect(const char *s);
 
 #endif
