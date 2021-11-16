@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/15 14:08:55 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/15 16:23:18 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 128
 
 // #include "wraloc.h"
 /*._-=-_._-=-_. [prototypes] ._-=-_._-=-_._-=-_.*/

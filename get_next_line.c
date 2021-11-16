@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/15 14:28:29 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/15 16:38:21 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,12 @@ char	*ret_next_line(char **str)
 	char	*ret;
 	char	*str_ptr;
 	char	*ptr;
+	size_t	len;
 
-	ret = (char *)malloc((1 + len_chrchr(*str, '\n')) * sizeof(char));
+	len = len_chrchr(*str, '\n');
+	if (!len)
+		len = strlen_protect(*str);
+	ret = (char *)malloc((1 + len) * sizeof(char));
 	if (!ret)
 		return (NULL);
 	str_ptr = *str;
@@ -87,14 +91,15 @@ char	*get_next_line(int fd)
 		b[fd].r_ret = read(fd, b[fd].buff, BUFFER_SIZE);
 		if (b[fd].r_ret == -1)
 			return (NULL);
-		b[fd].tmp = strjoin_and_free(&b[fd].tmp, b[fd].buff);
-		printf("|%s|\n", b[fd].tmp);
-		if (b[fd].r_ret && (len_chrchr(b[fd].tmp, '\n')))
+		if (!b[fd].r_ret && !strlen_protect(b[fd].tmp))
+			return (NULL);
+		if (!b[fd].r_ret)
 			break ;
+		b[fd].tmp = strjoin_and_free(&b[fd].tmp, b[fd].buff);
 		if (!b[fd].tmp)
 			return (free_return(&b[fd].tmp));
-		if (!b[fd].r_ret && !b[fd].tmp[0])
-			return (free_return(&b[fd].tmp));
+		if (b[fd].r_ret && len_chrchr(b[fd].tmp, '\n'))
+			break ;
 	}
 	b[fd].r = ret_next_line(&b[fd].tmp);
 	if (!b[fd].r)
