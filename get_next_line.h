@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/16 16:49:11 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/16 17:26:17 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 // # include "wraloc.h"//TODO REMOVE
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 2
+#  define BUFFER_SIZE 123
 # endif
 void	debug_nl(const char *str);//TODO REMOVE
 
