@@ -19,7 +19,6 @@ void	debug_nl(const char *str)
 	printf("\033[0m");
 }
 
-/*
 int	main(int ac, char **av)
 {
 	char	*str = NULL;
@@ -42,14 +41,14 @@ int	main(int ac, char **av)
 	close(fd);
 	return (0);
 }
-*/
 
+/*
 int	main()
 {
 	t_box data;
 	int i = 6;
 	vect_init(&data.vec, 128);
-	vect_cat(&data.vec, "a\nbb\nccc\ndddd\neeeee\nffffff");
+	vect_cat(&data.vec, "a\n");
 	debug_nl(data.vec.buff);
 	debug_nl("=============");
 	debug_nl("=============");
@@ -60,3 +59,4 @@ int	main()
 		debug_nl("=============");
 	}
 }
+*/

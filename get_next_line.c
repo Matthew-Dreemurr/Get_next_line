@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/16 15:24:51 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/16 16:44:32 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ char	*free_return(char *ptr, char *ret)
 	return (ret);
 }
 
-size_t	is_end_of_line(char *str)
+size_t	is_end_of_line(char *str, size_t max)
 {
 	size_t	len;
 
 	len = 0;
-	while (len < BUFFER_SIZE)
+	if (!str || !max)
+		return (0);
+	while (len < max)
 	{
 		if (str[len] == '\n' || str[len] == '\0')
 			return (1);
@@ -48,6 +50,8 @@ void	clear_vect_next_line(char *src, char *dst, size_t *vec_len)
 		*ptr++ = *src++;
 	*ptr = '\0';
 	*vec_len = strlen_protect(dst);
+	// printf("clear_vect_next_line:");
+	// debug_nl(dst);
 }
 
 char	*ret_next_line(t_box *data)
@@ -56,8 +60,9 @@ char	*ret_next_line(t_box *data)
 	char	*ptr2;
 
 	ptr1 = data->vec.buff;
-	while (*ptr1 && *ptr1 != '\n')
-		ptr1++;
+	while (*ptr1)
+		if (*ptr1++ == '\n')
+			break ;
 	data->res = (char *)malloc((size_t)((ptr1 - data->vec.buff) + 1));
 	if (!data->res)
 		return (NULL);
@@ -70,6 +75,8 @@ char	*ret_next_line(t_box *data)
 			break ;
 	}
 	*ptr2 = '\0';
+	// printf("ret_next_line:");
+	// debug_nl(data->res);
 	clear_vect_next_line(ptr1, data->vec.buff, &data->vec.len);
 	return (data->res);
 }
@@ -87,23 +94,29 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE < 1)
 		return (NULL);
-	if (!vect_init(&data[fd].vec, BUFFER_SIZE))
-		return (NULL);
-	while (1)
+	if (!data[fd].vec.max)
+		if (!vect_init(&data[fd].vec, BUFFER_SIZE))
+			return (NULL);
+	while (!is_end_of_line(data[fd].vec.buff,
+			(size_t []){(data[fd].vec.len - 1), 0}[!data[fd].vec.len]))
 	{
 		data[fd].read_ret = read(fd, data[fd].buffer, BUFFER_SIZE);
 		if (data[fd].read_ret == -1)
 			return (free_return(data[fd].vec.buff, NULL));
 		if (!data[fd].read_ret)
 			break ;
+		data[fd].buffer[data[fd].read_ret] = '\0';
+		// printf("BUFFER:");
+		// debug_nl(data[fd].buffer);
 		if (!vect_cat(&data[fd].vec, data[fd].buffer))
 			return (free_return(data[fd].vec.buff, NULL));
-		if (is_end_of_line(data[fd].buffer))
+		// printf("CAT:");
+		// debug_nl(data[fd].vec.buff);
+		if (is_end_of_line(data[fd].buffer, BUFFER_SIZE))
 			break ;
 	}
-	if (!ret_next_line(&data[fd]))
+	if (!ret_next_line(&data[fd]) || (!data[fd].vec.buff[0]
+			&& !data[fd].read_ret))
 		return (free_return(data[fd].vec.buff, NULL));
-	// if (!data[fd].vec.buff[0])
-		// return (free_return(&data[fd].vec.buff, NULL));
 	return (data[fd].res);
 }

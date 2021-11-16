@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/16 15:25:49 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/16 16:49:11 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
+// # include "wraloc.h"//TODO REMOVE
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 128
+#  define BUFFER_SIZE 2
 # endif
+void	debug_nl(const char *str);//TODO REMOVE
 
 /*._-=-_._-=-_. [prototypes] ._-=-_._-=-_._-=-_.*/
 
@@ -47,7 +49,7 @@ typedef struct s_vector
 
 typedef struct s_box
 {
-	char		buffer[BUFFER_SIZE];
+	char		buffer[BUFFER_SIZE + 1];
 	t_vector	vec;
 	char		*res;
 	ssize_t		read_ret;
