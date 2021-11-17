@@ -18,7 +18,7 @@ void	debug_nl(const char *str)
 	printf("\n");
 	printf("\033[0m");
 }
-
+/*
 int	main(int ac, char **av)
 {
 	char	*str = NULL;
@@ -29,17 +29,51 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (0);
 	fd = open(av[1], O_RDONLY);
-	int y = 2;
-	while (y--)
-		while ((str = get_next_line(fd)))
-		{
-			printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
-			if (str)
-				free(str);
-			i++;
-		}
+	while ((str = get_next_line(fd)))
+	{
+		printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
+		if (str)
+			free(str);
+		i++;
+	}
 	if (!str)
 		printf("NULL\n");
+	close(fd);
+	return (0);
+}
+*/
+int	main(int ac, char **av)
+{
+	char	*str = NULL;
+	int		fd;
+	int		i = 0;
+
+	setbuf(stdout, NULL);
+	if (ac != 2)
+		return (0);
+	fd = open(av[1], O_RDONLY);
+
+	str = get_next_line(1000);
+	printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
+	if (str)
+		free(str);
+	if (!str)
+		printf("NULL\n");
+	
+	str = get_next_line(-1);
+	printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
+	if (str)
+		free(str);
+	if (!str)
+		printf("NULL\n");
+	
+	str = get_next_line(fd);
+	printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
+	if (str)
+		free(str);
+	if (!str)
+		printf("NULL\n");
+	
 	close(fd);
 	return (0);
 }

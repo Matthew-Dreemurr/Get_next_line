@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/17 12:27:24 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/17 13:24:22 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_box
 char	*get_next_line(int fd);
 char	*ret_next_line(t_box *data);
 void	clear_vect_next_line(char *src, char *dst, size_t *vec_len);
-char	*free_return(char **ptr1, char **ptr2, char *ret, size_t vect_max);
+char	*free_ret(char **ptr1, char **ptr2, size_t *vect_max);
 
 /*=={ get_next_line_utils }==*/
 

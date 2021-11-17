@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/17 11:42:11 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/17 13:33:58 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 // # include "wraloc.h"//TODO REMOVE
+// # include "debug_utils.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 123
@@ -60,7 +61,7 @@ typedef struct s_box
 char	*get_next_line(int fd);
 char	*ret_next_line(t_box *data);
 void	clear_vect_next_line(char *src, char *dst, size_t *vec_len);
-char	*free_return(char *ptr1, char *ptr2, char *ret);
+char	*free_ret(char **ptr1, char **ptr2, size_t *vect_max);
 
 /*=={ get_next_line_utils }==*/
 
