@@ -6,50 +6,82 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/02 16:08:01 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/17 14:09:17 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 /**
- * @brief `strlen` but whiout crash when `NULL` and stop count when find
- *         the first occurence of char `c`
+ * @brief 
  * 
- * @param str      the tring to pars
- * @param c        the caracter to find
- * @return size_t  the number of character befor `c` (`c` include)
+ * @param ptr 
+ * @param ret 
+ * @return int 
  */
-size_t	len_chrchr(char *str, char c, size_t fill)
+char	*free_ret(char **ptr1, char **ptr2, size_t *vect_max)
 {
-	char	*start;
-
-	start = str;
-	while (fill-- && *str != c)
-		str++;
-	return ((size_t)(str - start));
+	free (*ptr1);
+	*ptr1 = NULL;
+	if (ptr2 && *ptr2)
+	{
+		free (*ptr2);
+		*ptr2 = NULL;
+	}
+	*vect_max = 0;
+	return (NULL);
 }
 
-size_t	strlen_protect(const char *s)
+size_t	is_end_of_line(char *str, size_t max)
 {
-	char	*start;
+	size_t	len;
 
-	start = (char *)s;
-	while (s && *s)
-		s++;
-	return ((size_t)(s - start));
+	len = 0;
+	if (!str || !max)
+		return (0);
+	while (len < max)
+	{
+		if (str[len] == '\n' || str[len] == '\0')
+			return (1);
+		len++;
+	}
+	return (0);
 }
 
-void	manage_next_line(t_box *b)
+void	clear_vect_next_line(char *src, char *dst, size_t *vec_len)
 {
-	b->fill += b->r_ret;
-	b->index = len_chrchr(b->buff, '\n', b->fill);
-	b->tmp = ft_substr(b->buff, 0, b->index + (b->index != b->fill));
-	b->r = strjoin_and_free(&b->r, b->tmp);
-	free(b->tmp);
-	ft_memcpy(b->buff, b->buff + b->index + (b->index != b->fill),
-		b->fill - b->index - (b->index != b->fill));
-	b->fill = b->fill - b->index - (b->index != b->fill);
+	char	*ptr;
+
+	ptr = dst;
+	while (*src)
+		*ptr++ = *src++;
+	*ptr = '\0';
+	*vec_len = strlen_protect(dst);
+}
+
+char	*ret_next_line(t_box *data)
+{
+	char	*ptr1;
+	char	*ptr2;
+
+	ptr1 = data->vec.buff;
+	while (*ptr1)
+		if (*ptr1++ == '\n')
+			break ;
+	data->res = (char *)malloc((size_t)((ptr1 - data->vec.buff) + 1));
+	if (!data->res)
+		return (NULL);
+	ptr1 = data->vec.buff;
+	ptr2 = data->res;
+	while (*ptr1)
+	{
+		*ptr2++ = *ptr1;
+		if (*ptr1++ == '\n')
+			break ;
+	}
+	*ptr2 = '\0';
+	clear_vect_next_line(ptr1, data->vec.buff, &data->vec.len);
+	return (data->res);
 }
 
 /**
@@ -61,29 +93,28 @@ void	manage_next_line(t_box *b)
  */
 char	*get_next_line(int fd)
 {
-	static t_box	b[FOPEN_MAX];
+	static t_box	data[FOPEN_MAX];
 
 	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE < 1)
 		return (NULL);
-	b[fd].r = NULL;
+	if (!data[fd].vec.max && !vect_init(&data[fd].vec, VEC_BUFFER_SIZE))
+		return (NULL);
 	while (1)
 	{
-		b[fd].r_ret = read(fd, (b[fd].buff + (b[fd].fill)),
-				BUFFER_SIZE - b[fd].fill);
-		if (!b[fd].r_ret && !b[fd].fill)
-		{
-			b[fd].fill = 0;
-			return (b[fd].r);
-		}
-		if (b[fd].r_ret == -1)
-		{
-			b[fd].fill = 0;
-			return (NULL);
-		}
-		manage_next_line(&b[fd]);
-		if (b[fd].r && b[fd].r[0]
-			&& b[fd].r[strlen_protect(b[fd].r) - 1] == '\n')
+		data[fd].read_ret = read(fd, data[fd].buffer, BUFFER_SIZE);
+		if (data[fd].read_ret == -1)
+			return (free_ret(&data[fd].vec.buff, NULL, &data[fd].vec.max));
+		data[fd].buffer[data[fd].read_ret] = '\0';
+		if (!vect_cat(&data[fd].vec, data[fd].buffer))
+			return (free_ret(&data[fd].vec.buff, NULL, &data[fd].vec.max));
+		if (is_end_of_line(data[fd].buffer, data[fd].read_ret))
+			break ;
+		if (!data[fd].read_ret)
 			break ;
 	}
-	return (b[fd].r);
+	if (!ret_next_line(&data[fd]))
+		return (free_ret(&data[fd].vec.buff, NULL, &data[fd].vec.max));
+	if ((!data[fd].res[0] && !data[fd].read_ret))
+		return (free_ret(&data[fd].vec.buff, &data[fd].res, &data[fd].vec.max));
+	return (data[fd].res);
 }
