@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/17 13:24:22 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/17 13:39:21 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,10 @@
 # include <stddef.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdio.h>
-// # include "wraloc.h"//TODO REMOVE
-// # include "debug_utils.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 123
 # endif
-// void	debug_nl(const char *str);//TODO REMOVE
 
 /*._-=-_._-=-_. [prototypes] ._-=-_._-=-_._-=-_.*/
 
@@ -62,6 +58,7 @@ char	*get_next_line(int fd);
 char	*ret_next_line(t_box *data);
 void	clear_vect_next_line(char *src, char *dst, size_t *vec_len);
 char	*free_ret(char **ptr1, char **ptr2, size_t *vect_max);
+size_t	is_end_of_line(char *str, size_t max);
 
 /*=={ get_next_line_utils }==*/
 
