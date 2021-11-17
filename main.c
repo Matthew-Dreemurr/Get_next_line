@@ -18,7 +18,6 @@ void	debug_nl(const char *str)
 	printf("\n");
 	printf("\033[0m");
 }
-/*
 int	main(int ac, char **av)
 {
 	char	*str = NULL;
@@ -41,7 +40,7 @@ int	main(int ac, char **av)
 	close(fd);
 	return (0);
 }
-*/
+/*
 int	main(int ac, char **av)
 {
 	char	*str = NULL;
@@ -78,7 +77,6 @@ int	main(int ac, char **av)
 	return (0);
 }
 
-/*
 int	main()
 {
 	t_box data;
