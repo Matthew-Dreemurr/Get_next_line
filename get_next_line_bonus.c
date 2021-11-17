@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/16 17:34:22 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/17 11:41:17 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,12 @@
  * @param ret 
  * @return int 
  */
-char	*free_return(char *ptr, char *ret)
+char	*free_return(char *ptr1, char *ptr2, char *ret)
 {
-	free (ptr);
+	if (ptr1)
+		free (ptr1);
+	if (ptr2)
+		free (ptr2);
 	return (ret);
 }
 
@@ -90,29 +93,24 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE < 1)
 		return (NULL);
-	if (!data[fd].vec.max)
-		if (!vect_init(&data[fd].vec, BUFFER_SIZE))
-			return (NULL);
+	if (!data[fd].vec.max && !vect_init(&data[fd].vec, BUFFER_SIZE))
+		return (NULL);
 	while (1)
 	{
 		data[fd].read_ret = read(fd, data[fd].buffer, BUFFER_SIZE);
 		if (data[fd].read_ret == -1)
-			return (free_return(data[fd].vec.buff, NULL));
+			return (free_return(data[fd].vec.buff, NULL, NULL));
 		if (!data[fd].read_ret)
 			break ;
 		data[fd].buffer[data[fd].read_ret] = '\0';
 		if (!vect_cat(&data[fd].vec, data[fd].buffer))
-			return (free_return(data[fd].vec.buff, NULL));
+			return (free_return(data[fd].vec.buff, NULL, NULL));
 		if (is_end_of_line(data[fd].buffer, data[fd].read_ret))
 			break ;
 	}
 	if (!ret_next_line(&data[fd]))
-		return (free_return(data[fd].vec.buff, NULL));
-	if ((!data[fd].res[0] && !data[fd].read_ret))
-	{
-		if (data[fd].res)
-			free (data[fd].res);
-		return (free_return(data[fd].vec.buff, NULL));
-	}
+		return (free_return(data[fd].vec.buff, NULL, NULL));
+	if ((!data[fd].res[0] && !data[fd].read_ret) && data[fd].res)
+		return (free_return(data[fd].vec.buff, data[fd].res, NULL));
 	return (data[fd].res);
 }
