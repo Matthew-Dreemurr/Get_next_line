@@ -29,13 +29,15 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (0);
 	fd = open(av[1], O_RDONLY);
-	while ((str = get_next_line(fd)))
-	{
-		printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
-		if (str)
-			free(str);
-		i++;
-	}
+	int y = 2;
+	while (y--)
+		while ((str = get_next_line(fd)))
+		{
+			printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
+			if (str)
+				free(str);
+			i++;
+		}
 	if (!str)
 		printf("NULL\n");
 	close(fd);
