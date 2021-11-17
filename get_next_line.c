@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:02:38 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/17 13:33:41 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/17 14:08:58 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE < 1)
 		return (NULL);
-	if (!data[fd].vec.max && !vect_init(&data[fd].vec, BUFFER_SIZE))
+	if (!data[fd].vec.max && !vect_init(&data[fd].vec, VEC_BUFFER_SIZE))
 		return (NULL);
 	while (1)
 	{

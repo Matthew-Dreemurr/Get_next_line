@@ -30,7 +30,11 @@ int	main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	while ((str = get_next_line(fd)))
 	{
-		printf("[%-5d]:[%p]|", i, &*str); debug_nl(str);
+		if (!(i%1000))
+		{
+			 printf("[%-5d]:[%p]|", i, &*str);
+			 debug_nl(str);
+		}
 		if (str)
 			free(str);
 		i++;

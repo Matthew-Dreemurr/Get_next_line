@@ -6,7 +6,7 @@
 /*   By: mahadad <mahadad@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:20:56 by mahadad           #+#    #+#             */
-/*   Updated: 2021/11/17 13:44:24 by mahadad          ###   ########.fr       */
+/*   Updated: 2021/11/17 14:30:05 by mahadad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 123
+#  define BUFFER_SIZE 128
 # endif
 
 /*._-=-_._-=-_. [prototypes] ._-=-_._-=-_._-=-_.*/
 
 # define VEC_EXIT_FAILURE ((void *)0)
 # define VEC_EXIT_SUCCESS ((int)1)
-# define VEC_BUFFER_SIZE  ((unsigned long)256)
+# define VEC_BUFFER_SIZE  ((unsigned long)1024)
 
 /**
  * @brief s_vector struc to manage the memory of a char array.

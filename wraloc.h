@@ -303,21 +303,21 @@ static inline void			*_WRAPPED_malloc(size_t size, int line, const char *func, c
 
 	if (!(ptr = malloc(size)))
 	{
-		dprintf( _FD, "\x1b[7;41m!!! !!! !!! !!! ALLOC FAILED !!! !!! !!! !!! \x1b[m\n");
+		// dprintf( _FD, "\x1b[7;41m!!! !!! !!! !!! ALLOC FAILED !!! !!! !!! !!! \x1b[m\n");
 		return (NULL);
 	}
 	_mem_append(&_WRALOC_MEM_LIST_, _mem_new(ptr, size, 0));
 	_WRALOC_NUM_ALLO_++;
 	tmp = _mem_get_elem_by_addr(_WRALOC_MEM_LIST_, ptr);
-	dprintf( _FD, CL_GR"+A+ ALLO_NUM %04lu | ADDR <%p> | SIZE %04lu | ",
-		_WRALOC_NUM_ALLO_, ptr, size);
+	// dprintf( _FD, CL_GR"+A+ ALLO_NUM %04lu | ADDR <%p> | SIZE %04lu | ",
+		// _WRALOC_NUM_ALLO_, ptr, size);
 	if (tmp && tmp->id < 127)
 	{
-		dprintf( _FD, "ID %c", (_WRAP_t_byte)tmp->id);
+		// dprintf( _FD, "ID %c", (_WRAP_t_byte)tmp->id);
 	}
 	else if (tmp)
 	{
-		dprintf( _FD, "ID %04lu", tmp->id);
+		// dprintf( _FD, "ID %04lu", tmp->id);
 	}
 	if (tmp)
 	{
@@ -327,8 +327,8 @@ static inline void			*_WRAPPED_malloc(size_t size, int line, const char *func, c
 			tmp->alloc_statrace = NULL;
 		}
 	}
-	dprintf( _FD, " : %s",tmp->alloc_statrace);
-	dprintf( _FD, CR "\n");
+	// dprintf( _FD, " : %s",tmp->alloc_statrace);
+	// dprintf( _FD, CR "\n");
 	return (ptr);
 }
 
@@ -342,19 +342,19 @@ static inline void			_WRAPPED_free(void *ptr, int line, const char *func, const 
 
 	if (ptr)
 	{
-		dprintf( _FD, CL_BL "-F- FREE_NUM %04lu | ADDR <%p> | SIZE %04lu | ", _WRALOC_NUM_FREE_, ptr, size);
+		// dprintf( _FD, CL_BL "-F- FREE_NUM %04lu | ADDR <%p> | SIZE %04lu | ", _WRALOC_NUM_FREE_, ptr, size);
 	}
 	else
 	{
-		dprintf( _FD, CL_CY "-F- =-=-=-= ADDR <%p> ZERO SIZE FREE NULL POINTER =-=-=-=", ptr);
+		// dprintf( _FD, CL_CY "-F- =-=-=-= ADDR <%p> ZERO SIZE FREE NULL POINTER =-=-=-=", ptr);
 	}
 	if (size && tmp && tmp->id < 127)
 	{
-		dprintf( _FD, "ID %c", (_WRAP_t_byte)tmp->id);
+		// dprintf( _FD, "ID %c", (_WRAP_t_byte)tmp->id);
 	}
 	else if (size && tmp)
 	{
-		dprintf( _FD, "ID %04lu", tmp->id);
+		// dprintf( _FD, "ID %04lu", tmp->id);
 	}
 	if (ptr && tmp)
 	{
@@ -366,17 +366,17 @@ static inline void			_WRAPPED_free(void *ptr, int line, const char *func, const 
 	}
 	if (tmp && tmp->freed_statrace)
 	{
-		dprintf( _FD, " : %s",tmp->freed_statrace);
+		// dprintf( _FD, " : %s",tmp->freed_statrace);
 	}
 	else if (!ptr || !size)
 	{
-		dprintf( _FD, " : " _FORMAT);
+		// dprintf( _FD, " : " _FORMAT);
 	}
 	if (ptr)
 	{
 		_WRALOC_NUM_FREE_++;
 	}
-		dprintf( _FD, CR "\n");
+		// dprintf( _FD, CR "\n");
 	_mem_set_status(&_WRALOC_MEM_LIST_, ptr, 1);
 	free(ptr);
 }
