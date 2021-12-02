@@ -8,3 +8,7 @@ This project has been coded according to the `NormeV3` standard.
 [NormeV3 PDF](https://github.com/42School/norminette) used in this projetc
 
 [Norme repo](https://github.com/42School/norminette)
+
+## TODO
+
+fix read optimisation https://discord.com/channels/212192000902955008/380042215969259521/911337632775143465
