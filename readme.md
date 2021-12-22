@@ -12,3 +12,5 @@ This project has been coded according to the `NormeV3` standard.
 ## TODO
 
 fix read optimisation https://discord.com/channels/212192000902955008/380042215969259521/911337632775143465
+
+This work is published under the terms of **[42 Unlicense](https://github.com/gcamerli/42unlicense)**.
